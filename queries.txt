@@ -1,0 +1,79 @@
+/* Query 1 - Top 5 Albums based on sales? */
+
+SELECT Album.albumid, Album.title, Artist.name AS "Artist Name", SUM(InvoiceLine.unitprice * InvoiceLine.quantity) AS Sales
+FROM Artist 
+
+JOIN Album 
+ON Artist.artistid = Album.artistid
+
+JOIN Track 
+ON Album.albumid = Track.albumid
+
+JOIN InvoiceLine 
+ON InvoiceLine.trackid = Track.trackid
+
+GROUP BY Album.albumid
+ORDER BY Sales DESC
+LIMIT 5;
+
+
+/* Query 2 -  Who Is The Artist With The Most Albums? */
+
+SELECT Artist.Name AS "Artist Name", count(Album.ArtistId) as "Total Of Albums"
+FROM Artist 
+
+JOIN Album
+ON  Artist.ArtistId = Album.ArtistId
+
+GROUP BY Artist.Name
+ORDER BY "Total Of Albums" DESC
+LIMIT 8;
+
+
+
+
+/* Query 3 - What Genre Type Did Customers Prefer Buy? */
+
+SELECT Genre.name, COUNT(DISTINCT customer.customerid) Customers
+FROM customer
+
+JOIN invoice 
+ON customer.customerid = invoice.customerid
+
+JOIN invoiceline 
+ON invoice.invoiceid = invoiceline.invoiceid
+
+JOIN Track 
+ON invoiceline.trackid = Track.trackid
+
+
+JOIN Genre
+ON Genre.Genreid = Track.Genreid
+
+GROUP BY Genre.name
+ORDER BY Customers DESC;
+
+
+
+/* Query 4 -  Top 5 Writing The Metal Music? */ 
+
+SELECT Artist.ArtistId, Artist.Name AS "Artist Name", count(*) as "Total Of Track"
+FROM Artist 
+
+JOIN Album 
+ON  Artist.ArtistId = Album.ArtistId
+
+JOIN Track 
+ON  Track.AlbumId = Album.AlbumId
+
+JOIN Genre 
+ON  Genre.GenreId = Track.GenreId
+
+WHERE Genre.Name = 'Metal'
+
+GROUP by Artist.ArtistId,Artist.Name
+ORDER BY "Total Of Track" DESC
+LIMIT 5;
+
+
+
